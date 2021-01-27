@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Course Selector - eSchool</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="js/lessons.js"></script>
+    </head>
+
+    <body>
+
+        <div id="app">
+            <header id="header">
+                <div class="nav">
+                    <div class="left">
+                        <h1>eSchool</h1>
+                    </div>
+                    <div class="right">
+                        <button @click='displayCheckout()' :hidden='isHidden(cart)'>{{this.cart.length}} Basket</button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="main-content">
+                
+                <div v-if="showProducts">
+                    <h2>Courses</h2>
+                    <p>
+                        <strong>Filter Price:</strong>
+                        <select v-model="sortBy">
+                            <option selected disabled value="">Price</option>
+                            <option value="highest">Highest - Lowest</option>
+                            <option value="lowest">Lowest - Highest</option>
+                        </select>
+                    </p>
+
+                    <div class="productRow">
+                        <div v-for="lesson in sortedLessons" class="productListed">
+                            <img v-bind:src="lesson.image">
+
+                            <div class="productDetails">
+                                <div class="productDesc">
+                                    <h3 v-text="lesson.name"></h3>
+                                    <h5 v-text="lesson.location"></h5>
+                                </div>
+                                
+                                <div class="productPrice">
+                                    <h4>£{{lesson.price}}</h4>
+                                    <button v-on:click='addToCart(lesson)' :disabled='isDisabled(lesson)'>Add To Cart</button>
+                                </div>
+                                <div class="productStock">
+                                    <p>Available stock: {{lesson.spaces}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-else>
+                    <h2>Checkout</h2>
+
+                    <div class="cart-backbutton">
+                        <button @click='displayCheckout()'>Back to Courses</button>
+                    </div>
+
+                    <div class="cart-grouping">
+                        <div class="cart-left">
+                            <table id="cartProducts">
+                                <tr v-for="lesson in cart">
+                                    <td>{{lesson.name}}</td>
+                                    <td>£{{lesson.price}}</td>
+                                    <td><button @click='removeLesson(lesson)'>Remove</button></td>
+                                </tr>
+                            </table>
+                            <p></p>
+                        </div>
+                        <div class="cart-right">
+                            <form>
+                                <input placeholder="name" v-model="form.name">
+                                <input placeholder="phone" v-model.number="form.phone">
+                                <button @click='checkoutsubmit()' :disabled='!validForm'>Checkout</button>
+                                <p v-if="!nameValid">Name field invalid, only enter text</p>
+                                <p v-if="!phoneValid">Phone field invalid, only enter numbers</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    
+        </div>
+
+        <script type="text/javascript">
+            var webstore = new Vue  ({
+                el: '#app',
+                data:   {
+                    product: lesson,
+                    cart: [],
+                    showProducts: true,
+                    form: {
+                        name: null,
+                        phone: null
+                    },
+                    sortBy: 'Price'
+                },
+                methods:    {
+                    // Adds lesson to cart and removes that lesson from its matching lesson ID
+                    // Stops at 0
+                    addToCart(lesson)  {
+                        if (lesson.spaces > 0)    {
+                            lesson.spaces -= 1;
+                            this.cart.push(lesson);
+                        }
+                    },
+                    // Hides cart unless there are products in it (this was part of the criteria...)
+                    isHidden(cart) {
+                        return cart.length <= 0;
+                    },
+                    // Disables Add to Cart Button if stock is less than or equal to 0
+                    isDisabled(lesson)    {
+                        return lesson.spaces <= 0;
+                    },
+                    // Hides the showProducts section by setting its visibility to false
+                    // Reveals showProducts section if actioned again by setting visibility to true
+                    displayCheckout() {
+                        this.showProducts = this.showProducts ? false : true;
+                    },
+                    // Removes product from cart and adds it back to the stock of that product
+                    removeLesson(lesson)  {
+                        if (lesson.spaces < 5)  {
+                            lesson.spaces += 1;
+                            this.cart.pop(lesson);
+                        }
+                    },
+
+                    // Simmple alert pop-up for checking out products and refreshes the page once closed
+                    checkoutsubmit()    {
+                        if (this.validForm)  {
+                            alert("Successfully Checked Out!");
+                            this.order.push(order.name && order.phone);
+                        }
+                    },
+                },
+                computed:   {
+                    // Validation for name ensures it is only text
+                    nameValid() {
+                        return /^[A-Za-z]+$/.test(this.form.name);
+                    },
+                    // Validation for phone ensures only numbers can be entered
+                    phoneValid()    {
+                        return typeof this.form.phone == "number";
+                    },
+                    // Disables checkout button until validation passes
+                    validForm() {
+                        return this.nameValid && this.phoneValid;
+                    },
+                    // Sort products in order of price from highest to lowest using drop down menu
+                    // Hopefully this counts as ascending and descending order
+                    sortedLessons() {
+                         return this.product.sort((a, b) => {
+                            if (this.sortBy == 'highest') {
+                                return b.price - a.price
+                            }
+                            else if (this.sortBy == 'lowest') {
+                                return a.price - b.price
+                            }
+                        })
+                    }
+                }
+            })
+        </script>
+
+    </body>
+
+</html>

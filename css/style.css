@@ -1,0 +1,191 @@
+*   {
+    font-family: sans-serif;
+    margin: 0 auto;
+    padding: 0;
+}
+#header {
+    position: fixed;
+    display: flex;
+    top: 0;
+    width: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid #000000;
+    z-index: 999;
+}
+.nav    {
+    display: flex;
+    width: 1200px;
+    height: 60px;
+    align-items: center;
+    flex-direction: row;
+}
+.nav .left   {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.left h1   {
+    margin: 1px;
+}
+.nav .right  {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.right button {
+    padding: 5px;
+    margin: 1px;
+}
+
+.main-content   {
+    margin-top: 65px;
+    width: 1200px;
+    overflow-x: hidden;
+}
+
+/* productRow aligns all products in a single line horizontally */
+.productRow	{
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: wrap;
+}
+/* productListed */
+.productListed	{
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.25);
+    border-radius: 5px;
+    background-color: #ffffff;
+    width: 18rem;
+    word-wrap: break-word;
+    margin-bottom: 10px;
+    -webkit-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.55);
+    -moz-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.55);
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.55);
+    
+}
+.productListed img	{
+    width: 100%;
+    height: 180px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+.productDetails {
+    padding: 25px;
+}
+.productDesc	{
+    color: #000000; /* Sets The Default Colour For All Text In This Class */
+}
+.productPrice	{
+    position: relative;
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.productPrice h4	{
+    width: 100%;
+}
+.productPrice button 	{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    text-decoration: none;
+    color: #000000;
+    background-color: rgba(0,0,0,0);
+    border: 1px solid #000000;
+}
+.productPrice button:hover	{
+    -webkit-transition-duration: 1.3s; /* How long it takes for this style to load after hovering */
+    transition-duration: 1.3s;
+    background-color: #000000;
+    color: #ffffff;
+    cursor: pointer;
+}
+.productPrice button:disabled   {
+    background-color: #ffffff;
+    color: #000000;
+    cursor: not-allowed;
+}
+.productStock   {
+    margin-top: 12px;
+}
+.cart-backbutton    {
+    display: flex;
+    width: 100%;
+}
+.cart-backbutton button {
+    display: flex;
+    justify-content: center;
+    width: 20%;
+    padding: 10px;
+    margin-left: 0;
+    text-decoration: none;
+    color: #000000;
+    background-color: rgba(0,0,0,0);
+    border: 1px solid #000000;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.cart-backbutton button:hover   {
+    -webkit-transition-duration: 1.3s; /* How long it takes for this style to load after hovering */
+    transition-duration: 1.3s;
+    background-color: #000000;
+    color: #ffffff;
+    cursor: pointer;
+}
+table#cartProducts  {
+    width: 100%;
+    border: 1px solid #000000;
+    float: left;
+}
+table#cartProducts td:nth-child(1)  {
+    width: 130px;
+}
+table#cartProducts td   {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px;
+    width: 5rem;
+}
+.cart-grouping  {
+    display: flex;
+    width: 100%;
+}
+.cart-left  {
+    width: 30%;
+}
+.cart-right {
+    width: 70%;
+    margin-left: 20px;
+}
+.cart-right button  {
+    display: flex;
+    justify-content: center;
+    width: 20%;
+    padding: 10px;
+    margin-left: 0;
+    text-decoration: none;
+    color: #000000;
+    background-color: rgba(0,0,0,0);
+    border: 1px solid #000000;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.cart-right button:hover    {
+    -webkit-transition-duration: 1.3s; /* How long it takes for this style to load after hovering */
+    transition-duration: 1.3s;
+    background-color: #000000;
+    color: #ffffff;
+    cursor: pointer;
+}
+.cart-right button:disabled {
+    background-color: #ffffff;
+    color: #000000;
+    cursor: not-allowed;
+}
