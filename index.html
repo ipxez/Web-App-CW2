@@ -7,7 +7,7 @@
         <title>Course Selector - eSchool</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="js/lessons.js"></script>
+        <script src="js/Vue.js"></script>
     </head>
 
     <body>
@@ -38,7 +38,7 @@
                     </p>
 
                     <div class="productRow">
-                        <div v-for="lesson in sortedLessons" class="productListed">
+                        <div v-for="lesson in product" class="productListed">
                             <img v-bind:src="lesson.image">
 
                             <div class="productDetails">
@@ -93,7 +93,7 @@
     
         </div>
 
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">
             var webstore = new Vue  ({
                 el: '#app',
                 data:   {
@@ -171,7 +171,7 @@
                     }
                 }
             })
-        </script>
+        </script> -->
 
     </body>
 
