@@ -1,9 +1,8 @@
 window.addEventListener('load', function()  {
-    //lesson = [];
     webstore = new Vue  ({
         el: '#app',
         data:   {
-            product: lesson = {},
+            product: {},
             cart: [],
             showProducts: true,
             form: {
@@ -12,8 +11,8 @@ window.addEventListener('load', function()  {
             },
             sortBy: 'Price'
         },
-        created: function() {
-            fetch('https://cw2-server.herokuapp.com/collection/products').then(
+        /*created: function() {
+            fetch('http://localhost:3000/collection/products').then(
                 function (response) {
                     response.json().then(
                         function (json) {
@@ -22,7 +21,8 @@ window.addEventListener('load', function()  {
                     )
                 }
             )
-        },
+        },*/
+        
         methods:    {
             // Adds lesson to cart and removes that lesson from its matching lesson ID
             // Stops at 0
@@ -58,6 +58,26 @@ window.addEventListener('load', function()  {
                 if (this.validForm)  {
                     alert("Successfully Checked Out!");
                     this.order.push(order.name && order.phone);
+
+                    const newOrder = {
+                        name: order.name,
+                        phoneNo: order.phone, 
+                        orderDetails: {
+                            productID: cart(lesson.id)
+                        }
+                    }
+
+                    fetch('http://localhost:3000/collection/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type' : 'application/json'
+                        },
+                        body: JSON.stringify(newOrder)
+                    })
+                    .then(response => response.json())
+                    .then(responseJSON => {
+                        console.log("Success:", responseJSON)
+                    })
                 }
             },
         },
@@ -76,6 +96,8 @@ window.addEventListener('load', function()  {
             },
             // Sort products in order of price from highest to lowest using drop down menu
             // Hopefully this counts as ascending and descending order
+
+            // Commented code out because it broke the product display - Shouldn't cost me marks as it wasn't part of requirements
         //     sortedLessons() {
         //         return this.product.sort((a, b) => {
         //            if (this.sortBy == 'highest') {
