@@ -2,7 +2,9 @@ window.addEventListener('load', function()  {
     webstore = new Vue  ({
         el: '#app',
         data:   {
-            product: {},
+            product: {
+                prodImg: {},
+            },
             cart: [],
             showProducts: true,
             form: {
@@ -22,6 +24,21 @@ window.addEventListener('load', function()  {
                 }
             )
         },*/
+
+        created: function() {
+            fetch('http://localhost:3000/collection/products', {
+                method: 'GET',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify()
+            })
+            .then(response => response.json())
+            .then(responseJSON => {
+                webstore.product = responseJSON;
+                //console.log("Success:", responseJSON)
+            })
+        },
         
         methods:    {
             // Adds lesson to cart and removes that lesson from its matching lesson ID
@@ -49,7 +66,7 @@ window.addEventListener('load', function()  {
             removeLesson(lesson)  {
                 if (lesson.spaces < 5)  {
                     lesson.spaces += 1;
-                    this.cart.pop(lesson);
+                    this.cart.splice(this.cart.indexOf(lesson), 1);
                 }
             },
 
