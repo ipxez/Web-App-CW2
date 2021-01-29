@@ -15,7 +15,7 @@ window.addEventListener('load', function()  {
         },
 
         created: function() {
-            fetch('https:cw2-server.herokuapp.com///collection/products', {
+            fetch('https:cw2-server.herokuapp.com/collection/products', {
                 method: 'GET',
                 headers: {
                     'Content-Type' : 'application/json'
