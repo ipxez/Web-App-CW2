@@ -13,20 +13,9 @@ window.addEventListener('load', function()  {
             },
             sortBy: 'Price'
         },
-        /*created: function() {
-            fetch('http://localhost:3000/collection/products').then(
-                function (response) {
-                    response.json().then(
-                        function (json) {
-                            webstore.product = json
-                        }
-                    )
-                }
-            )
-        },*/
 
         created: function() {
-            fetch('http://localhost:3000/collection/products', {
+            fetch('https:cw2-server.herokuapp.com///collection/products', {
                 method: 'GET',
                 headers: {
                     'Content-Type' : 'application/json'
@@ -39,7 +28,6 @@ window.addEventListener('load', function()  {
                 //console.log("Success:", responseJSON)
             })
         },
-        
         methods:    {
             // Adds lesson to cart and removes that lesson from its matching lesson ID
             // Stops at 0
@@ -47,6 +35,20 @@ window.addEventListener('load', function()  {
                 if (lesson.spaces > 0)    {
                     lesson.spaces -= 1;
                     this.cart.push(lesson);
+
+                    let updateProduct = {spaces: lesson.spaces};
+
+                    fetch('https://cw2-server.herokuapp.com/collection/products/' + lesson._id, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type' : 'application/json'
+                        },
+                        body: JSON.stringify(updateProduct)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Successfully updated spaces:', data)
+                    })                    
                 }
             },
             // Hides cart unless there are products in it (this was part of the criteria...)
@@ -67,24 +69,57 @@ window.addEventListener('load', function()  {
                 if (lesson.spaces < 5)  {
                     lesson.spaces += 1;
                     this.cart.splice(this.cart.indexOf(lesson), 1);
+                    
+                    let updateProduct = {spaces: lesson.spaces};
+
+                    fetch('https://cw2-server.herokuapp.com/collection/products/' + lesson._id, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type' : 'application/json'
+                        },
+                        body: JSON.stringify(updateProduct)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Successfully updated spaces:', data)
+                    })
                 }
             },
 
             // Simmple alert pop-up for checking out products and refreshes the page once closed
-            checkoutsubmit()    {
+            checkoutsubmit(cart)    {
                 if (this.validForm)  {
-                    alert("Successfully Checked Out!");
-                    this.order.push(order.name && order.phone);
 
+                    // Counts how many times duplicate ID's come up so I can filter them
+                    // when putting the objects into MongoDB
+                    const mp = new Map(cart.map(o => [o._id, {...o, count: 0}]));
+                    for (const {_id} of cart) mp.get(_id).count++;
+                    const result = Array.from(mp.values());
+
+                    console.log(result)
+
+                    // Targetting specific fields in array for order collection
+                    let cartID = result.map(a=>({id: a._id}));
+                    let cartName = result.map(b=>({name: b.name}));
+                    let cartSpaces = result.map(c=>({spaces: c.count}));
+
+                    let currentDate = new Date().toJSON();
+
+                    // Creating an object to send to the database
                     const newOrder = {
-                        name: order.name,
-                        phoneNo: order.phone, 
-                        orderDetails: {
-                            productID: cart(lesson.id)
-                        }
+                        customer_name: this.form.name,
+                        customer_number: this.form.phone,
+                        product_purchased: {
+                            lesson_id: cartID,
+                            lesson_name: cartName,
+                            spaces_bought: cartSpaces,
+                        },
+                        date: currentDate
                     }
 
-                    fetch('http://localhost:3000/collection/orders', {
+                    console.log(newOrder);
+
+                    fetch('https://cw2-server.herokuapp.com/collection/orders', {
                         method: 'POST',
                         headers: {
                             'Content-Type' : 'application/json'
@@ -93,8 +128,12 @@ window.addEventListener('load', function()  {
                     })
                     .then(response => response.json())
                     .then(responseJSON => {
-                        console.log("Success:", responseJSON)
-                    })
+                        console.log('Success:', responseJSON)
+                    });
+                    alert("Successfully Checked Out! (Refreshing the page will permanently remove the items from the DB)");
+                }
+                else    {
+                    alert('Something went wrong :(');
                 }
             },
         },
